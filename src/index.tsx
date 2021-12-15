@@ -1,27 +1,13 @@
-/**
- * r3f gl render refs
- *   - https://codesandbox.io/s/react-three-fiber-viewcube-py4db
- *   - https://codesandbox.io/s/react-three-fiber-viewport-example-yf8yt
- *   - https://codesandbox.io/s/react-three-fiber-multiple-scene-test-k7ei0
- * multiple views refs
- *   - https://threejs.org/examples/#webgl_multiple_views
- *   - https://gracious-keller-98ef35.netlify.app/docs/recipes/heads-up-display-rendering-multiple-scenes/
- *   - https://threejsfundamentals.org/threejs/lessons/threejs-multiple-scenes.html
- * Outline shader material refs
- *   - https://codesandbox.io/s/edgesgeometry-iup24?file=/src/index.js:0-6
- *   - https://codepen.io/prisoner849/pen/KKqmyEV?editors=0010
- *   - https://discourse.threejs.org/t/making-invisible-edges-dashed/29824/2
- */
-
-import React from "react";
+import { useRef, Suspense } from "react";
 import { render } from "react-dom";
 import useRefs from "react-use-refs";
 import * as THREE from "three";
 import * as DREI from "@react-three/drei";
 import * as FIBER from "@react-three/fiber";
 import * as CANNON from "@react-three/cannon";
-import { useGeometry } from "./atoms";
-import { Wrap, Grid, Box, handlers } from "./utils";
+import * as handlers from './handlers'
+import { useGeometry } from "./hooks";
+import { Wrap, Grid, Box } from "./components";
 
 const Cam = DREI.OrthographicCamera;
 const v0 = new THREE.Vector3();
@@ -29,7 +15,7 @@ const v0 = new THREE.Vector3();
 render(<App />, document.getElementById("root"));
 
 function App() {
-  const [$0, $1, $2] = useRefs(null);
+  const [$0, $1, $2] = useRefs<[any, any, any]>(null)
 
   return (
     <Wrap margin="2rem">
@@ -48,14 +34,14 @@ function App() {
           </DREI.GizmoHelper>
           <ambientLight />
           <pointLight />
-          <React.Suspense>
+          <Suspense fallback={null}>
             <CANNON.Physics gravity={[0, -10, 0]}>
               <CANNON.Debug scale={1.1} color="black">
                 <Target mass={1} />
                 {/* <Plane /> */}
               </CANNON.Debug>
             </CANNON.Physics>
-          </React.Suspense>
+          </Suspense>
           <axesHelper scale={10} position={[0.01, 0.01, 0.01]} />
           <color attach="background" args={["#fff"]} />
         </FIBER.Canvas>
@@ -80,10 +66,10 @@ function App() {
   );
 }
 
-function ViewPort(props) {
+function ViewPort(props: any): any {
   const { $, as: As, ...other } = props;
   const { gl, scene, viewport } = FIBER.useThree();
-  const ref = React.useRef(null);
+  const ref = useRef<any>(null);
   FIBER.useFrame(() => {
     const context = $.current.getContext("2d");
     ref.current.lookAt(v0);
@@ -96,13 +82,13 @@ function ViewPort(props) {
   return FIBER.createPortal(<As ref={ref} {...other} />, viewport);
 }
 
-function Target(props) {
-  const ref = React.useRef();
-  // const [ref, api] = useBox(() => props);
+function Target(props: any) {
+  const { mass, ...other } = props
+  const ref = useRef();
   const geometry = useGeometry();
 
   return (
-    <group ref={ref}>
+    <group ref={ref} {...other}>
       <lineSegments onUpdate={(_) => _.computeLineDistances()}>
         <edgesGeometry args={[geometry]} />
         <lineDashedMaterial
