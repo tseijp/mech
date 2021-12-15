@@ -14,3 +14,6 @@ yarn-debug.log*
 yarn-error.log*
 /.changelog
 .npm/
+*.stl
+*.glb
+*.gltf
