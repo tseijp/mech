@@ -22,20 +22,19 @@ export function useGeometry (props: any = {}) {
 
 export class GeometryController {
   callback: Fun = ()=>{}
-  geometry: any
   manager: any
   props: any = {}
   state: any = {}
 
   constructor (callback: Fun = ()=>{}) {
     this.callback = callback
-    this.geometry = defaultGeometry()
+    this.state.geometry = defaultGeometry()
     this.bind = this.bind.bind(this)
   }
 
   apply (props: any) {
     this.props = props
-    return [this.geometry, this.bind.bind(this)]
+    return [this.state, this.bind.bind(this)]
   }
 
   effect () {
@@ -60,7 +59,6 @@ export class GeometryController {
     $.reader.addEventListener('progress', this.progress.bind(this))
     $.reader.addEventListener('load', this.load.bind(this))
     $.reader.readAsArrayBuffer( $.file );
-    console.log($)
 
   }
 
@@ -68,13 +66,20 @@ export class GeometryController {
     const { state: $ } = this
     $.size = '(' + ~~Math.floor( e.total / 1000 ) + ' KB)';
     $.progress = Math.floor( ( e.loaded / e.total ) * 100 ) + '%';
-    console.log($.size, $.progress)
   }
 
   async load (e: any) {
     const { state: $ } = this
     $.result = e.target.result;
-    this.geometry = $.loader.parse($.result)
+    $.geometry = $.loader.parse($.result)
+    $.geometry.center()
+    $.max = $.geometry.boundingBox.max
+    $.min = $.geometry.boundingBox.min
+    $.width = $.max.x - $.min.x
+    $.height = $.max.y - $.min.y
+    $.depth = $.max.z - $.min.z
+    $.scale = 1 / Math.max($.width, $.height, $.depth)
+    $.geometry.scale($.scale, $.scale, $.scale)
     this.callback([])
   }
 

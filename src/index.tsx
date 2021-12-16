@@ -17,7 +17,7 @@ render(<App />, document.getElementById("root"));
 
 function App() {
   const [$0, $1, $2, cam] = useRefs<[any, any, any, any]>(null)
-  const [geometry, bind] = useGeometry({$0, $1, $2, cam})
+  const [{geometry, name="V Block", size='1800'}, bind] = useGeometry({$0, $1, $2, cam})
   return (
       <Wrap margin="2rem">
         <Grid col="auto auto" row="auto 1auto">
@@ -58,10 +58,10 @@ function App() {
           <Box col="4/5" text="Scale" />
           <Box col="5/7" text="Projection" />
           <Box col="7/8" text="Number" />
-          <Box col="1/4" file="V Block" {...bind()}/>
+          <Box col="1/4" file={name} {...bind()}/>
           <Box col="4/5" input="1:1" />
           <Box col="5/7" input={"Third Angle"} />
-          <Box col="7/8" input="1800" />
+          <Box col="7/8" input={size} />
         </Grid>
       </Wrap>
   );
@@ -87,7 +87,6 @@ function ViewPort(props: any): any {
 function Target(props: any) {
   const { mass, geometry, ...other } = props
   const ref = useRef();
-  console.log('changed geo in Target')
   return (
     <group ref={ref} {...other}>
       <lineSegments onUpdate={(_) => _.computeLineDistances()}>

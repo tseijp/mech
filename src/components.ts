@@ -65,7 +65,8 @@ function withBoxAttrs (props: any) {
     other.htmlFor = file;
     other.hidden = true;
     other.type = 'file';
-    return { id: file, as: "label", children: el('input', other) };
+    other.key= 'file'
+    return { id: file, as: "label", children: [el('input', other), file] };
   }
   return other;
 }
