@@ -16,25 +16,33 @@ export const Wrap = styled.section<any>`
   cursor: crosshair;
 `;
 
-export const Grid = styled.section.attrs(withUnitAttrs)`
+export const Grid = styled.section
+    .attrs(withUnitAttrs)
+    .attrs(withGridAttrs)`
+  margin: auto;
   display: grid;
-  grid-gap: 0.5mm;
-  grid-template-rows: ${({ row, _ }) => row?.split(" ").join(_ + " ") + _};
-  grid-template-columns: ${({ col, _ }) => col?.split(" ").join(_ + " ") + _};
+  max-width: 100%;
+  grid-auto-flow: column;
+  ${({ row }) => row && `grid-template-rows: ${row};`}
+  ${({ col }) => col && `grid-template-columns: ${col};`}
   ${({ w, h, _ }) => css({ width: w + _, height: h + _ })}
-  margin: ${({ b }) => b ? `auto 0 0 auto` : `auto`};
   ${({ b }) => b && css`
-    background: black;
     cursor: auto;
+    margin: auto 0 0 auto;
+    grid-gap: 0.5mm;
+    background: black;
     border-left: medium solid #000;
     border-top: medium solid #000;
   `}
   @media screen and (max-width: ${({ w, _ }) => w + _}) {
-    display: none;
+    display: ${({ b }) => b? 'none': 'auto'};
+    grid-template-rows: repeat(4, 1fr);
   }
 `;
 
-export const Box = styled.span.attrs(withBoxAttrs)`
+export const Box = styled.span
+    .attrs(withBoxAttrs)
+    .attrs(withCursorAttrs)`
   width: auto;
   height: auto;
   border: initial;
@@ -47,9 +55,9 @@ export const Box = styled.span.attrs(withBoxAttrs)`
   vertical-align: middle;
   text-align: center;
   font-size: ${({ small }) => small ? "3.5mm" : "5mm"};
+  ${({ row }) => row && `grid-row: ${row};`}
   ${({ col }) => col && `grid-column: ${col};`}
-  ${({ row }) => row && `grid-row: ${row};`};
-  ${({ file }) => file && `cursor: pointer;`}
+  ${({cursor}) => cursor && css({cursor})}
 `;
 
 function withUnitAttrs (props: any) {
@@ -57,10 +65,18 @@ function withUnitAttrs (props: any) {
   return props;
 }
 
+function withGridAttrs (props: any) {
+  const { row, col, _ } = props;
+  if (row) props.row = row.split(" ").join(_ + " ") + _;
+  if (col) props.col = col.split(" ").join(_ + " ") + _;
+  return props;
+}
+
 function withBoxAttrs (props: any) {
-  const { file, text, label, input, ...other } = props;
+  const { file, text, mesh, label, input, ...other } = props;
   if (input) return { ...other, as: "input", defaultValue: input };
   if (text) return { ...other, as: "div", children: props.text };
+  if (mesh) return { ...other, as: "div", children: props.mesh };
   if (file) {
     other.htmlFor = file;
     other.hidden = true;
@@ -69,4 +85,10 @@ function withBoxAttrs (props: any) {
     return { id: file, as: "label", children: [el('input', other), file] };
   }
   return other;
+}
+
+function withCursorAttrs(props: any) {
+  const { file, mesh } = props
+  if (file || mesh) props.cursor = 'pointer'
+  return props
 }

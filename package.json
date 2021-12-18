@@ -1,14 +1,15 @@
 {
-  "name": "third-angle-projection",
+  "name": "mech",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
-  "main": "src/index.js",
+  "main": "src/index.tsx",
   "license": "MIT",
   "dependencies": {
-    "@react-three/cannon": "3.1.2",
+    "@react-spring/three": "^9.3.1",
     "@react-three/drei": "7.20.3",
     "@react-three/fiber": "^7.0.24",
+    "@use-gesture/react": "^10.2.4",
     "babel-plugin-glsl": "1.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",

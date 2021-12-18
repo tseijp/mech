@@ -1,24 +1,12 @@
-/**
- * ref: https://github.com/mrdoob/three.js/blob/master/editor/js/Loader.js#L65
- */
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import { useState, useEffect } from "react";
 
 type Fun = (...args: any[]) => void
 const Loaders = { STLLoader, OBJLoader, GLTFLoader, DRACOLoader }
 const loadErrorMessage = "Load Error: This file is not supported by Loaders";
-
-export function useGeometry (props: any = {}) {
-    const callback = useState([])[1]
-    const [ctrl] = useState(new GeometryController(callback))
-    useEffect(() => ctrl.effect.bind(ctrl)())
-    useEffect(() => ctrl.clean.bind(ctrl), [ctrl])
-    return ctrl.apply(props)
-}
 
 export class GeometryController {
   callback: Fun = ()=>{}
@@ -45,9 +33,26 @@ export class GeometryController {
 
   clean () {}
 
+  bind (key='') {
+    if (key === 'file')
+      return {onChange: this.change.bind(this)}
+    if (key === 'mesh')
+        return {onClick: this.click.bind(this)}
+  }
+
+  change (e: any) {
+    this.callback([])
+    this.state.changed = true
+    this.state.target = e.target
+  }
+
+  click () {
+      this.callback([])
+    this.state.isMesh = !this.state.isMesh
+  }
+
   compute () {
     const { state: $ } = this
-
     $.changed = false
     $.file = $.target.files[0] || {}
     $.name = $.file.name || ''
@@ -68,7 +73,7 @@ export class GeometryController {
     $.progress = Math.floor( ( e.loaded / e.total ) * 100 ) + '%';
   }
 
-  async load (e: any) {
+  load (e: any) {
     const { state: $ } = this
     $.result = e.target.result;
     $.geometry = $.loader.parse($.result)
@@ -78,19 +83,9 @@ export class GeometryController {
     $.width = $.max.x - $.min.x
     $.height = $.max.y - $.min.y
     $.depth = $.max.z - $.min.z
-    $.scale = 1 / Math.max($.width, $.height, $.depth)
-    $.geometry.scale($.scale, $.scale, $.scale)
+    $.scale = Math.max($.width, $.height, $.depth)
+    $.geometry.scale(1/$.scale, 1/$.scale, 1/$.scale)
     this.callback([])
-  }
-
-  change (e: any) {
-    this.state.changed = true
-    this.state.target = e.target
-    this.callback([])
-  }
-
-  bind () {
-    return {onChange: this.change.bind(this)}
   }
 }
 
