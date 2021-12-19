@@ -23,6 +23,8 @@ __Outline shader material refs__
   - https://codepen.io/prisoner849/pen/KKqmyEV?editors=0010
   - https://discourse.threejs.org/t/making-invisible-edges-dashed/29824/2
 
+__Upload 3D Model refs__
+  - https://github.com/mrdoob/three.js/blob/master/editor/js/Loader.js#L65
 
 [status]: https://github.com/tseijp/mech/actions
 [code-quality]: https://www.codefactor.io/repository/github/tseijp/mech
