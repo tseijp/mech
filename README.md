@@ -26,6 +26,11 @@ __Outline shader material refs__
 __Upload 3D Model refs__
   - https://github.com/mrdoob/three.js/blob/master/editor/js/Loader.js#L65
 
+__Third Angle Projection Symbol refs__
+  - https://upload.wikimedia.org/wikipedia/commons/6/62/First_angle_projection_symbol.svg
+  - https://upload.wikimedia.org/wikipedia/commons/6/64/Third_angle_projection_symbol.svg
+  - https://codesandbox.io/s/svg-filter-v9-kwcpe?file=/src/index.js
+
 [status]: https://github.com/tseijp/mech/actions
 [code-quality]: https://www.codefactor.io/repository/github/tseijp/mech
 [license]: https://github.com/tseijp/mech

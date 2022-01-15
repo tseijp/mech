@@ -6,7 +6,6 @@
   "main": "src/index.tsx",
   "license": "MIT",
   "dependencies": {
-    "@react-spring/three": "^9.3.1",
     "@react-three/drei": "7.20.3",
     "@react-three/fiber": "^7.0.24",
     "@use-gesture/react": "^10.2.4",
@@ -14,6 +13,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "4.0.3",
+    "react-spring": "^9.4.2",
     "react-use-refs": "1.0.0",
     "styled-components": "5.3.3",
     "three": "0.134.0"
