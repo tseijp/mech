@@ -1,28 +1,18 @@
 import { ReactNode } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useCursorAttrs, useBoxAttrs } from "./attrs"
 
 export type BoxProps = Partial<{
-  key: string;
   children: ReactNode;
-  /**
-   * useBoxAttrs
-   */
-  file: string;
-  text: string;
-  href: string;
-  items: string;
-  label: string;
-  select: string;
-  /**
-   * stylings
-   */
-  $rt: boolean; // raw text if true
-  $sm: boolean; // text small if true
-  $cp: boolean; // cursor pointer if true
-  $i: string;
-  $j: string;
-}>;
+  key: string
+  $rt: boolean // raw text if true
+  $sm: boolean // text small if true
+  $cp: boolean // cursor pointer if true
+  $to: string // link to open new tab
+  $as: string // values of select options
+  $i: string
+  $j: string
+}>
 
 
 export const Box = styled.div
@@ -40,7 +30,7 @@ export const Box = styled.div
   text-align: center;
   background: ${({theme}) => theme.isDarkMode? "#222933": "#fff"};
   font-size: ${({ $sm }) => ($sm ? "3.5mm" : "5mm")};
-  ${({ $cp }) => $cp && `
+  ${({ $cp }) => $cp && css`
     cursor: pointer;
     text-decoration: underline;
   `}

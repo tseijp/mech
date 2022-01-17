@@ -3,17 +3,17 @@ import styled, { css } from "styled-components";
 import { useUnitAttrs, useGridAttrs, useThemeAttrs } from "./attrs"
 
 export type GridProps = Partial<{
-  children: ReactNode;
-  margin: string;
-  theme: any; // wrap use ThemeProvider if use
-  _: string;
-  $w: string; // width style
-  $h: string; // height style
-  $i: string; // grid col style
-  $j: string; // grid row style
-  $b: boolean; // border if true
-  $mm: boolean; // px to mm if true
-  $top: boolean; // top style if true
+  children: ReactNode
+  margin: string
+  theme: any // wrap use ThemeProvider if use
+  _: string
+  $w: string // width style
+  $h: string // height style
+  $i: string // grid col style
+  $j: string // grid row style
+  $b: boolean // border if true
+  $mm: boolean // px to mm if true
+  $top: boolean // top style if true
 }>;
 
 export const Grid = styled.div
@@ -35,7 +35,7 @@ export const Grid = styled.div
 `;
 
 function topStyle(props: GridProps) {
-  const { $top, margin, theme } = props
+  const { $top, margin, theme } = props;
   return $top && css`
     ${css({margin})}
     top: 0;
@@ -43,8 +43,8 @@ function topStyle(props: GridProps) {
     width: calc(100% - 2 * ${margin});
     height: calc(100% - 2 * ${margin});
     border: medium solid ${theme.isDarkMode? "#e2e2e2": "#000"};
-    position: fixed;
     cursor: crosshair;
+    position: fixed;
   `
 }
 

@@ -6,19 +6,18 @@ import { ThemeProvider } from "styled-components";
 export function useBoxAttrs<T extends object>(props: T): T
 
 export function useBoxAttrs(props: any) {
-  const { select, href, file, ...other } = props;
-  if (select) return other; // TODO
-  if (href) return { onClick: () => window.open(href, '_blank'), ...other }
-  if (!file) return other;
-  const config = { htmlFor: file, hidden: true, type: "file", key: file };
-  return { id: file, as: "label", children: [el("input", config), file] };
+  const { $to, type, children: id } = props;
+  if ($to) props.onClick = () => void window.open($to, '_blank')
+  if (!props.onChange) return props;
+  const config = { type, hidden: true, htmlFor: id, key: id } as any;
+  return { as: "label", children: [el("input", config), id], id };
 }
 
 export function useCursorAttrs<T extends object>(props: T): T
 
 export function useCursorAttrs(props: any) {
-  const { file, href, mesh } = props;
-  if (file || mesh || href) props.$cp = true;
+  const { $to, onClick, onChange } = props;
+  if ($to || onClick || onChange) props.$cp = true;
   return props;
 }
 
@@ -46,6 +45,6 @@ export function useThemeAttrs<T extends object>(props: T): T
 export function useThemeAttrs(props: any) {
   const { theme, children, ...other } = props;
   if (!theme) return props;
-  other.children = el(ThemeProvider, {theme}, children)
+  other.children = el(ThemeProvider, {theme}, children);
   return other
 }

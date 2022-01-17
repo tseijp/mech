@@ -9,10 +9,10 @@ import { useGestures } from "./hooks"
 import { useGeometry } from "./hooks";
 import { Grid, Box, Style, Symbol } from "./components";
 
+const date = (_: any) => `${_.getFullYear()}.${_.getMonth()+1}.${_.getDate()}`
 const style = {touchAction: "none", margin: 0}
 const center = new THREE.Vector3();
 const Camera = DREI.OrthographicCamera;
-const coodDate = (date = new Date()) => `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`
 const USER = "https://github.com/tseijp"
 const REPO = "https://github.com/tseijp/mech"
 
@@ -63,8 +63,8 @@ function ViewPort(props: any): any {
 
 function App() {
   const [$0, $1, $2, camera] = useRefs<[any, any, any, any]>(null)
-  const [state, bind] = useGestures({$0, $1, $2, camera})
-  const [$, _] = useGeometry({$0, $1, $2, camera})
+  const [state, bind] = useGestures()
+  const [$, _] = useGeometry()
   return (
     <Grid $top $j="auto auto" theme={{isDarkMode: $.isMesh}} margin="10mm">
       <Style $d={$.isMesh} />
@@ -106,19 +106,19 @@ function App() {
         </FIBER.Canvas>
       </Grid>
       <Grid $b $mm $i="12 43 10 15 15 15 40" $j="7 8 10 15">
-        <Box $i="1/3" $j="1/3" href={REPO}>{document.title}</Box>
-        <Box $i="3/6" $j="1/3" select="">{coodDate()}</Box>
+        <Box $i="1/3" $j="1/3" $to={REPO}>{document.title}</Box>
+        <Box $i="3/6" $j="1/3">{date(new Date())}</Box>
         <Box $i="6/7" $sm>No.</Box>
         <Box $i="7/8" $sm>1710000</Box>
         <Box $i="6/7" $sm>Name</Box>
-        <Box $i="7/8" $sm href={USER}>tseijp</Box>
+        <Box $i="7/8" $sm $to={USER}>tseijp</Box>
         <Box $i="1/4">Title</Box>
         <Box $i="4/5">Scale</Box>
         <Box $i="5/7">Projection</Box>
         <Box $i="7/8">Number</Box>
-        <Box $i="1/4" file={$.name||"V Block"} {..._("file")}/>
+        <Box $i="1/4" {..._({type: "file"})}>{$.name || "V Block"}</Box>
         <Box $i="4/5">1:1</Box>
-        <Box $i="5/7" mesh {..._("mesh")}><Symbol $d={$.isMesh}/></Box>
+        <Box $i="5/7" {..._({type: "mesh"})}><Symbol $d={$.isMesh}/></Box>
         <Box $i="7/8">{$.size||"1800"}</Box>
       </Grid>
     </Grid>

@@ -1,22 +1,31 @@
+const { round, PI } = Math;
+
 type Fun = (...args: any[]) => void;
 interface Lookup<T = any> {
   [key: string]: T
 }
-const { round, PI } = Math;
 
-export class GestureController {
-  props: Lookup = {};
-  state: Lookup = {};
-  set: Fun = () => {};
+export type GesturesState = Partial<{
+  weight: number
+  step: number
+  dx: number
+  dy: number
+  dz: number
+  rx: number
+  ry: number
+  rz: number
+  s: number
+  rotation: [number, number, number]
+  scale: [number, number, number]
+}>
 
-  constructor() {
-    this.state = { rotation: [0, 0, 0], scale: [1, 1, 1] };
-  }
+export class GesturesController {
+  state: GesturesState = { rotation: [0, 0, 0], scale: [1, 1, 1] };
+  dispatch: Fun = () => {};
 
-  apply(props: Lookup, set: Fun) {
+  bind(dispatch: Fun) {
+    this.dispatch = dispatch
     const gestures: Lookup = {};
-    this.props = props;
-    this.set = set;
     gestures.onDrag = this.drag.bind(this);
     gestures.onWheel = this.wheel.bind(this);
     return gestures;
@@ -40,16 +49,16 @@ export class GestureController {
       $.rx = round($.dx / $.step) * $.step;
       $.ry = round($.dy / $.step) * $.step;
       $.rz = round($.dz / $.step) * $.step;
-      this.set({ rotation: [$.rx, $.ry, $.rz] });
-    } else this.set({ rotation: [$.rx + $.dx, $.ry + $.dy, $.rx + $.dz] });
+      this.dispatch({ rotation: [$.rx, $.ry, $.rz] });
+    } else this.dispatch({ rotation: [$.rx! + $.dx, $.ry! + $.dy, $.rx! + $.dz] });
   }
 
   wheel(state: Lookup) {
     const { state: $ } = this;
     const {
-      offset: [, y]
+      offdispatch: [, y]
     } = state;
     $.s = 1 + y / 1000;
-    this.set({ scale: [$.s, $.s, $.s] });
+    this.dispatch({ scale: [$.s, $.s, $.s] });
   }
 }
