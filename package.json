@@ -5,6 +5,7 @@
   "keywords": [],
   "main": "src/index.tsx",
   "license": "MIT",
+  "homepage": "https://tseijp.github.io/mech",
   "dependencies": {
     "@react-three/drei": "7.20.3",
     "@react-three/fiber": "^7.0.24",

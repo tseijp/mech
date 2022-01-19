@@ -1,12 +1,27 @@
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 type Fun = (...args: any[]) => void;
-const Loaders = { STLLoader, OBJLoader, GLTFLoader, DRACOLoader };
-const loadErrorMessage = "Load Error: This file is not supported by Loaders";
+const loadErrorMessage = "Load Error: This file is not supported.";
+const Loaders = { STLLoader, OBJLoader, FBXLoader, GLTFLoader };
+const Parsers = {
+    STL: (e: any, _: any) => {
+        const geometry = _.parse?.(e.target.result)
+        const material = new THREE.MeshStandardMaterial();
+        return new THREE.Mesh(geometry, material)
+    },
+    // TODO merge geometries from Group
+    OBJ: (e: any, _: any) => _.parse?.(e.target.result),
+    FBX: (e: any, _: any) => _.parse?.(e.target.result),
+    // TODO merge geometries from Scenes
+    GLTF: (e: any, _: any) => {
+        const scene = _.parse?.(e.target.result)
+        return scene
+    }
+}
 
 function defaultGeometry(_: any = {}) {
   const shape = new THREE.Shape();
@@ -31,10 +46,10 @@ function defaultGeometry(_: any = {}) {
 }
 
 export type GeometryState =  Partial<{
-  isMesh: boolean
-  changed: boolean
-  name: string
-  type: string
+  isChanged: boolean // effect if true
+  isMesh: boolean // using material if true
+  name: string // filename
+  type: string // filetype such as STL, FBX, OBJ
   size: string
   pbar: string
   key: string
@@ -44,32 +59,27 @@ export type GeometryState =  Partial<{
   height: number
   depth: number
   scale: number
-  reader?: FileReader;
-  loader?: THREE.Loader;
-  geometry?: THREE.BufferGeometry;
-  material?: THREE.Material;
+  target?: any
+  reader?: FileReader
+  loader?: STLLoader | OBJLoader | FBXLoader | GLTFLoader
+  parser?: (event: Event, loader: any) => THREE.Mesh
+  mesh?: THREE.Mesh
+  geometry?: THREE.BufferGeometry
+  material?: THREE.Material | THREE.Material[]
 }>
 
 export class GeometryController {
   callback: Fun = () => {};
   state: GeometryState = {};
-  target?: any;
 
   constructor(callback: Fun = () => {}) {
     this.callback = callback;
     this.state.geometry = defaultGeometry();
   }
 
-  effect() {
-    if (!this.target || !this.state.changed) return;
-    this.compute();
-  }
-
-  clean() {
-    this.state.material?.dispose();
-    this.state.geometry?.dispose();
-  }
-
+  /**
+   * Event Hanlders
+   */
   bind(_: any) {
     if (_.type === "mesh") _.onClick = _.onDoubleClick = this.click.bind(this);
     if (_.type === "file") _.onChange = this.change.bind(this);
@@ -77,36 +87,56 @@ export class GeometryController {
   }
 
   change(e: any) {
+    this.state.isChanged = true;
+    this.state.target = e.target;
     this.callback([]);
-    this.state.changed = true;
-    this.target = e.target;
   }
 
   click() {
-    this.callback([]);
     this.state.isMesh = !this.state.isMesh;
-  }
-
-  select(e: any) {
     this.callback([]);
-    console.log(e);
   }
 
-  compute() {
+  /**
+   * process each or once render
+   */
+  effect() {
     const { state: $ } = this;
-    const file = this.target.files[0];
-    $.changed = false;
-    $.name = file.name || "";
-    $.type = $.name!.split(".").slice(-1)[0] || "";
-    $.key = $.type.toUpperCase() + "Loader" as keyof (typeof Loaders)
+    if (!this.state.isChanged) return;
+    if(!$.target?.files)
+      return console.warn("Event Target Files " + loadErrorMessage);
+    const file = $.target.files[0];
+    $.isChanged = false;
+    this.setup(file.name);
+    $.reader?.readAsArrayBuffer(file);
+  }
 
+  clean() {
+    const { state: $ } = this;
+    // this.setup();
+    return () => {
+      if (Array.isArray($.material))
+          $.material.forEach(m => m?.dispose())
+      else $.material?.dispose()
+      $.geometry?.dispose();
+    }
+  }
+
+  /**
+   * Load file
+   */
+  setup(filename="") {
+    const { state: $ } = this;
+    $.name = filename || "";
+    $.type = $.name!.split(".").slice(-1)[0].toUpperCase() || "";
+    $.key = $.type + "Loader" as keyof (typeof Loaders);
     const FileLoader = (Loaders as any)[$.key];
-    if (!file || !FileLoader) return console.warn(loadErrorMessage);
+    if (!FileLoader) return console.warn("File " + loadErrorMessage);
     $.reader = new FileReader();
     $.loader = new FileLoader();
+    $.parser = Parsers[$.type as keyof (typeof Parsers)];
     $.reader.addEventListener("progress", this.progress.bind(this));
     $.reader.addEventListener("load", this.load.bind(this));
-    $.reader.readAsArrayBuffer(file);
   }
 
   progress(e: any) {
@@ -116,12 +146,20 @@ export class GeometryController {
   }
 
   load(e: any) {
-    this.callback([]);
     const { state: $ } = this;
-    $.geometry = ($.loader as any).parse(e.target.result);
-    if (!$.geometry) return
-    $.geometry.center();
-    const { min, max } = $.geometry.boundingBox!
+    $.mesh = $.parser?.(e, $.loader);
+    if (!$.mesh) return console.warn("Parsed Mesh " + loadErrorMessage);
+    if (!$.mesh.geometry) return console.warn("Parsed Geometry " + loadErrorMessage);
+    this.geometry = $.mesh.geometry || $.geometry;
+    this.callback([]);
+  }
+
+  set geometry(geometry: THREE.BufferGeometry) {
+    const { state: $ } = this;
+    geometry.center?.(); // "center" effect to set geoemtry boundingBox
+    $.geometry = geometry;
+    if (!geometry.boundingBox) return;
+    const { min, max } = geometry.boundingBox!;
     $.width = max.x - min.x;
     $.height = max.y - min.y;
     $.depth = max.z - min.z;

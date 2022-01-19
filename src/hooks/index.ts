@@ -8,12 +8,12 @@ export function useGeometry() {
   const callback = useState([])[1];
   const [ctrl] = useState(new GeometryController(callback));
   useEffect(() => ctrl.effect.bind(ctrl)());
-  useEffect(() => ctrl.clean.bind(ctrl), [ctrl]);
+  useEffect(() => ctrl.clean.bind(ctrl)(), [ctrl]);
   return [ctrl.state, ctrl.bind.bind(ctrl)] as any[];
 }
 
 export function useGestures() {
   const [ctrl] = useState(new GesturesController());
-  const [spring, set] = useSpring(() => ctrl.state);
-  return [spring, use(ctrl.bind(set))] as any[];
+  const [spring, api] = useSpring(() => ctrl.state);
+  return [spring, use(ctrl.bind(api.start.bind(api)))] as any[];
 }

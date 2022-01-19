@@ -1,5 +1,8 @@
 ### my created ###
 src/react-app-env.d.ts
+*.stl
+*.glb
+*.gltf
 
 .idea/
 .vscode/
@@ -17,6 +20,3 @@ yarn-debug.log*
 yarn-error.log*
 /.changelog
 .npm/
-*.stl
-*.glb
-*.gltf

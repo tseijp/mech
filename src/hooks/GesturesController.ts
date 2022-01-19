@@ -24,7 +24,7 @@ export class GesturesController {
   dispatch: Fun = () => {};
 
   bind(dispatch: Fun) {
-    this.dispatch = dispatch
+    this.dispatch = dispatch;
     const gestures: Lookup = {};
     gestures.onDrag = this.drag.bind(this);
     gestures.onWheel = this.wheel.bind(this);
@@ -55,9 +55,7 @@ export class GesturesController {
 
   wheel(state: Lookup) {
     const { state: $ } = this;
-    const {
-      offdispatch: [, y]
-    } = state;
+    const { offset: [, y] } = state;
     $.s = 1 + y / 1000;
     this.dispatch({ scale: [$.s, $.s, $.s] });
   }

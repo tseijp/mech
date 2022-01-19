@@ -31,6 +31,11 @@ __Third Angle Projection Symbol refs__
   - https://upload.wikimedia.org/wikipedia/commons/6/64/Third_angle_projection_symbol.svg
   - https://codesandbox.io/s/svg-filter-v9-kwcpe?file=/src/index.js
 
+__CRANKSHAFT 3D Model (CC license, Royalty Free License
+)__
+  - https://sketchfab.com/3d-models/crankshaft-a3d8b494358a403688e3ab280c17d67e
+  - https://www.cgtrader.com/free-3d-models/industrial/part/crankshaft
+
 [status]: https://github.com/tseijp/mech/actions
 [code-quality]: https://www.codefactor.io/repository/github/tseijp/mech
 [license]: https://github.com/tseijp/mech

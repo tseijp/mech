@@ -9,12 +9,12 @@ import { useGestures } from "./hooks"
 import { useGeometry } from "./hooks";
 import { Grid, Box, Style, Symbol } from "./components";
 
-const date = (_: any) => `${_.getFullYear()}.${_.getMonth()+1}.${_.getDate()}`
-const style = {touchAction: "none", margin: 0}
+const date = (_: any) => `${_.getFullYear()}.${_.getMonth()+1}.${_.getDate()}`;
+const style = {touchAction: "none", margin: 0};
 const center = new THREE.Vector3();
 const Camera = DREI.OrthographicCamera;
-const USER = "https://github.com/tseijp"
-const REPO = "https://github.com/tseijp/mech"
+const USER = "https://github.com/tseijp/";
+const REPO = USER + "mech"
 
 
 function beforeCompile(shader: any) {
@@ -62,16 +62,16 @@ function ViewPort(props: any): any {
 }
 
 function App() {
-  const [$0, $1, $2, camera] = useRefs<[any, any, any, any]>(null)
-  const [state, bind] = useGestures()
-  const [$, _] = useGeometry()
+  const [$0, $1, $2, camera] = useRefs<[any, any, any, any]>(null);
+  const [state, bind] = useGestures();
+  const [$, _] = useGeometry();
   return (
     <Grid $top $j="auto auto" theme={{isDarkMode: $.isMesh}} margin="10mm">
       <Style $d={$.isMesh} />
       <Grid $i="auto auto" $j="auto auto"> {/* $w="150mm"*/}
         <canvas ref={$0} {...bind(1)} style={style} />
         <canvas ref={$1} {...bind(2)} style={style} />
-        <canvas ref={$2} {...bind(0)} style={style}/>
+        <canvas ref={$2} {...bind(0)} style={style} />
         <FIBER.Canvas style={{gridRow: "1/2", gridColumn: "2/3"}}>
           <ViewPort $={$0} zoom={100} position-y={100} as={Camera} />
           <ViewPort $={$1} zoom={100} position-z={100} as={Camera} />
@@ -119,7 +119,7 @@ function App() {
         <Box $i="1/4" {..._({type: "file"})}>{$.name || "V Block"}</Box>
         <Box $i="4/5">1:1</Box>
         <Box $i="5/7" {..._({type: "mesh"})}><Symbol $d={$.isMesh}/></Box>
-        <Box $i="7/8">{$.size||"1800"}</Box>
+        <Box $i="7/8">{$.size || "1800"}</Box>
       </Grid>
     </Grid>
   );
