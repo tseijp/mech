@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/mech/static/js/main.10e6ffb3.chunk.js",
+    "main.js.map": "/mech/static/js/main.10e6ffb3.chunk.js.map",
+    "runtime-main.js": "/mech/static/js/runtime-main.77a30f7d.js",
+    "runtime-main.js.map": "/mech/static/js/runtime-main.77a30f7d.js.map",
+    "static/js/2.595fa036.chunk.js": "/mech/static/js/2.595fa036.chunk.js",
+    "static/js/2.595fa036.chunk.js.map": "/mech/static/js/2.595fa036.chunk.js.map",
+    "index.html": "/mech/index.html",
+    "static/js/2.595fa036.chunk.js.LICENSE.txt": "/mech/static/js/2.595fa036.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.77a30f7d.js",
+    "static/js/2.595fa036.chunk.js",
+    "static/js/main.10e6ffb3.chunk.js"
+  ]
+}
