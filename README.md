@@ -1,10 +1,53 @@
 # MECH⚙
 
+<div align="center">
+
+###### CAD like Model Viewer in [tseijp.github.io/mech](https://tseijp.github.io/mech/)
 [![][status-img]][status]
 [![][code-quality-img]][code-quality]
 [![][license-img]][license]
 
-Created with CodeSandbox
+  <a href="https://tseijp.github.io/mech/">
+    <img src="https://i.imgur.com/zZOZQKZ.gif" width="600" alt="⚙" />
+  </a>
+</div>
+
+
+## Getting Started
+
+This website is built using [Docusaurus 2](https://docusaurus.io/),
+a modern static website generator.
+
+### Installation
+
+```bash
+git clone https://github.com/tseijp/home
+cd home
+yarn
+```
+
+### Local Development
+
+```bash
+yarn start
+```
+
+This command starts a local development server and opens up a browser window.
+Most changes are reflected live without having to restart the server.
+
+### Build
+
+```bash
+yarn build
+```
+
+This command generates static content into the `build` directory
+and can be served using any static contents hosting service.
+
+
+### References
+
+- This project is Created with CodeSandbox
 
 __r3f gl render refs__
 
