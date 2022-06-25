@@ -1,4 +1,4 @@
-# MECH⚙
+# ⚙@tsei/mech
 
 <div align="center">
 
