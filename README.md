@@ -1,4 +1,4 @@
-# ⚙@tsei/mech
+# ⚙mech
 
 <div align="center">
 
@@ -8,7 +8,7 @@
 [![][license-img]][license]
 
   <a href="https://tseijp.github.io/mech/">
-    <img src="https://i.imgur.com/zZOZQKZ.gif" width="600" alt="⚙" />
+    <img alt="⚙" width="600" src="https://i.imgur.com/zZOZQKZ.gif" />
   </a>
 </div>
 
